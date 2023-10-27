@@ -7,15 +7,17 @@ pygame.init()
 
 
 run = True
+play = False
 clicked = False
 scene = settings.SCREEN
 clock = pygame.time.Clock()
 
 box_list = render.box_list
-indicator = sprites.Indicator(0, 0, scene)
+num_list = render.num_list
+indicator = sprites.Indicator((settings.LABEL_LENGTH), 0, scene)
 
 ADVANCE = pygame.USEREVENT + 1
-BPM_TICK = pygame.time.set_timer(ADVANCE, settings.TICK_8TH)
+BPM_TICK = pygame.time.set_timer(ADVANCE, settings.TICK_BEAT)
 BPM_TICK
 
 while run:
@@ -26,17 +28,22 @@ while run:
         if event.type == pygame.MOUSEBUTTONDOWN:
             for b in box_list:
                 b.check_click()
-        if event.type == ADVANCE:
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+            play = not play
+        if event.type == ADVANCE and play:
             indicator.tick()
+
 
     indicator.run()     
     for b in box_list:
         b.run()
+        if play:
+            b.check_indicator()
+    for n in num_list:
+        n.draw()
 
     pygame.display.update()
 
     clock.tick(60)
-
-# FIX FIRST NOTE NOT PLAYING
 
 pygame.quit()
