@@ -4,14 +4,15 @@ import settings
 pygame.mixer.init()
 pygame.font.init()
 
-box_width = (settings.SCREEN_WIDTH / settings.BEAT_LENGTH)
+box_width = ((settings.SCREEN_WIDTH / settings.BEAT_LENGTH) - (settings.SCREEN_WIDTH / 100))
 indicator_pos = (settings.LABEL_LENGTH)
 box_height = settings.BOX_HEIGHT
+label_font_large = pygame.font.SysFont("Arial", 45)
 label_font = pygame.font.SysFont("Arial", 30)
 label_font_small = pygame.font.SysFont("Arial", 15)
 
 class BOX():
-    def __init__(self, x, y, screen, sample):
+    def __init__(self, x, y, screen, sample, outline_color):
         self.rect = pygame.Rect(x, y, box_width, box_height) #x, y, width, height
         self.label_rect = pygame.Rect(0, y, settings.LABEL_LENGTH, box_height)
         self.surface = screen
@@ -23,10 +24,11 @@ class BOX():
         self.can_play = True
         self.x = x
         self.y = y
+        self.outline_color = outline_color
 
     def draw(self):
         pygame.draw.rect(self.surface, self.color, self.rect)
-        pygame.draw.rect(self.surface, (200, 200, 200), self.rect, 5)
+        pygame.draw.rect(self.surface, self.outline_color, self.rect, 5)
 
     def check_click(self):
         self.m_pos = pygame.mouse.get_pos()
@@ -94,3 +96,33 @@ class Indicator():
 
     def run(self):
         self.draw()
+
+class Menu():
+    def __init__(self, screen):
+        self.y_pos = (settings.SCREEN_HEIGHT - settings.MENU_HEIGHT)
+        self.surface = screen
+
+        self.menu_rect = pygame.Rect(0, self.y_pos, settings.SCREEN_WIDTH, settings.MENU_HEIGHT)
+        self.menu_color = (120, 120, 120)
+
+        self.bpm_x = (settings.LABEL_LENGTH)
+        self.bpm_y = (self.y_pos + (self.y_pos / 10))
+        self.bpm_rect = pygame.Rect(self.bpm_x, self.bpm_y, 70, 60)
+
+        self.bpm_text = label_font_large.render(str(settings.BPM), True, self.menu_color)
+
+    def change_bpm(self, n):
+        self.m_pos = pygame.mouse.get_pos()
+        if self.bpm_rect.collidepoint(self.m_pos):
+            settings.BOX_HEIGHT += n
+    
+    def draw_bg(self):
+        pygame.draw.rect(self.surface, self.menu_color, self.menu_rect)
+
+    def draw_bpm(self):
+        pygame.draw.rect(self.surface, (0,0,0), self.bpm_rect)
+        self.surface.blit(self.bpm_text, (self.bpm_x, self.bpm_y))
+    
+    def run(self):
+        self.draw_bg()
+        self.draw_bpm()
