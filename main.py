@@ -18,7 +18,7 @@ indicator = sprites.Indicator((settings.LABEL_LENGTH), 0, scene)
 menu = sprites.Menu(scene)
 
 ADVANCE = pygame.USEREVENT + 1
-BPM_TICK = pygame.time.set_timer(ADVANCE, settings.TICK_BEAT)
+BPM_TICK = pygame.time.set_timer(ADVANCE, sprites.TICK_BEAT)
 BPM_TICK
 
 while run:
@@ -35,6 +35,7 @@ while run:
             indicator.tick()
         if event.type == pygame.MOUSEWHEEL:
             menu.change_bpm(int(event.__getattribute__('precise_y')))
+            BPM_TICK = pygame.time.set_timer(ADVANCE, sprites.TICK_BEAT)
 
 
     indicator.run()     

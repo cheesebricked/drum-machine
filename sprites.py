@@ -11,6 +11,9 @@ label_font_large = pygame.font.SysFont("Arial", 45)
 label_font = pygame.font.SysFont("Arial", 30)
 label_font_small = pygame.font.SysFont("Arial", 15)
 
+BPM = 120
+TICK_BEAT = (int(60000 / (BPM * (settings.SUBDIVISION / 4))))
+
 class BOX():
     def __init__(self, x, y, screen, sample, outline_color):
         self.rect = pygame.Rect(x, y, box_width, box_height) #x, y, width, height
@@ -106,20 +109,22 @@ class Menu():
         self.menu_color = (120, 120, 120)
 
         self.bpm_x = (settings.LABEL_LENGTH)
-        self.bpm_y = (self.y_pos + (self.y_pos / 10))
+        self.bpm_y = (self.y_pos + (self.y_pos / 20))
         self.bpm_rect = pygame.Rect(self.bpm_x, self.bpm_y, 70, 60)
-
-        self.bpm_text = label_font_large.render(str(settings.BPM), True, self.menu_color)
 
     def change_bpm(self, n):
         self.m_pos = pygame.mouse.get_pos()
         if self.bpm_rect.collidepoint(self.m_pos):
-            settings.BOX_HEIGHT += n
+            global BPM
+            global TICK_BEAT
+            BPM += n
+            TICK_BEAT = (int(60000 / (BPM * (settings.SUBDIVISION / 4))))
     
     def draw_bg(self):
         pygame.draw.rect(self.surface, self.menu_color, self.menu_rect)
 
     def draw_bpm(self):
+        self.bpm_text = label_font_large.render(str(BPM), True, self.menu_color)
         pygame.draw.rect(self.surface, (0,0,0), self.bpm_rect)
         self.surface.blit(self.bpm_text, (self.bpm_x, self.bpm_y))
     
