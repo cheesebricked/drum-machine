@@ -4,7 +4,7 @@ import settings
 pygame.mixer.init()
 pygame.font.init()
 
-box_width = ((settings.SCREEN_WIDTH / settings.BEAT_LENGTH) - (settings.SCREEN_WIDTH / 100))
+box_width = ((settings.SCREEN_WIDTH / settings.BEAT_LENGTH) - (settings.SCREEN_WIDTH / (settings.BEAT_LENGTH * 5)))
 indicator_pos = (settings.LABEL_LENGTH)
 box_height = settings.BOX_HEIGHT
 label_font_large = pygame.font.SysFont("Arial", 45)
@@ -27,7 +27,10 @@ class BOX():
         self.can_play = True
         self.x = x
         self.y = y
-        self.outline_color = outline_color
+        self.grey = (200, 200, 200)
+        self.green = (0, 200, 0)
+        self.outline = outline_color
+        self.outline_color = self.outline
 
     def draw(self):
         pygame.draw.rect(self.surface, self.color, self.rect)
@@ -51,6 +54,9 @@ class BOX():
             self.can_play = False
         if indicator_pos != self.rect.x:
             self.can_play = True
+            self.outline_color = self.outline
+        if indicator_pos == self.rect.x:
+            self.outline_color = self.green
 
     def draw_label_text(self, text):
         self.label = label_font.render(text, True, (200,200,200))
@@ -86,7 +92,7 @@ class Indicator():
         pygame.draw.rect(self.surface, (200,200,200), self.indicator)
 
     def tick(self):
-        if self.indicator.x < (settings.SCREEN_WIDTH - box_width):
+        if self.indicator.x < (settings.SCREEN_WIDTH - (box_width * 2)):
             self.count += 1
             self.indicator.x = (((settings.SCREEN_WIDTH - + settings.LABEL_LENGTH) * (self.count / (settings.BEAT_LENGTH))) + settings.LABEL_LENGTH)
             global indicator_pos
@@ -98,7 +104,8 @@ class Indicator():
             self.count = 0
 
     def run(self):
-        self.draw()
+        #self.draw()
+        pass
 
 class Menu():
     def __init__(self, screen):
