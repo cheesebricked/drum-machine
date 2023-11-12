@@ -4,6 +4,7 @@ I do not claim to own any audio assets used in this project.
 Currently figuring out how to render this to an EXE
 
 INSTRUCTIONS:
+- Run main.py to start
 - Click boxes on screen to change the state to active.
   - There is 1 row for each instrument, and 16 beats per instrument. The pattern is in 16th notes.
 - BPM counter is at the bottom left.
