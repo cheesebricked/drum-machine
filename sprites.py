@@ -1,5 +1,7 @@
 import pygame
 import settings
+from render import box_list
+from saves import saves, bpms
 
 pygame.mixer.init()
 pygame.font.init()
@@ -67,6 +69,15 @@ class BOX():
         pygame.draw.rect(self.surface, (200,200,200), self.label_rect, 5)
         self.draw_label_text(self.sound)
 
+    def change_state(self, state_input):
+        self.active = state_input
+
+    def save_state(self):
+        if self.active:
+            return True
+        else:
+            return False
+
     def run(self):
         self.draw_label()
         self.change_color()
@@ -126,6 +137,9 @@ class Menu():
             global TICK_BEAT
             BPM += n
             TICK_BEAT = (int(60000 / (BPM * (settings.SUBDIVISION / 4))))
+
+    def get_bpm(self):
+        return BPM
     
     def draw_bg(self):
         pygame.draw.rect(self.surface, self.menu_color, self.menu_rect)
@@ -138,3 +152,40 @@ class Menu():
     def run(self):
         self.draw_bg()
         self.draw_bpm()
+
+class Saves():
+    def __init__(self, x, y, num, screen, size):
+        self.surface = screen
+        self.y_pos = (settings.SCREEN_HEIGHT - settings.MENU_HEIGHT)
+        self.x = x
+        self.y = y
+
+        self.size = size
+        self.num = str(num)
+
+        self.label = label_font.render(self.num, True, (120, 120, 120))
+        self.save_rect = pygame.Rect(x, y, self.size, self.size)
+    
+    def save(self):
+        if self.save_rect.collidepoint(pygame.mouse.get_pos()):
+            for b in box_list:
+                saves[self.num].append(b.save_state())
+            bpms[self.num] = BPM
+            print("saved!")
+    
+    def load(self):
+        global BPM
+        global TICK_BEAT
+        if self.save_rect.collidepoint(pygame.mouse.get_pos()):
+            for s in range(len(box_list)):
+                box_list[(s - 1)].change_state(saves[self.num][(s-1)])
+            BPM = bpms[self.num]
+            TICK_BEAT = (int(60000 / (BPM * (settings.SUBDIVISION / 4))))
+            print("loaded!")
+
+    def draw(self):
+        pygame.draw.rect(self.surface, (0,0,0), self.save_rect)
+        self.surface.blit(self.label, (self.x, self.y))
+
+    def run(self):
+        self.draw()
