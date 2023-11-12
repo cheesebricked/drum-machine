@@ -1,4 +1,6 @@
+import json
 from settings import BEAT_LENGTH, SOUND_LIST
+
 
 empty_save = []
     
@@ -27,3 +29,16 @@ bpms = {
     "8" : 120
 }
 
+def save():
+    with open("saves.json", "w") as file:
+        json.dump((saves, bpms), file)
+
+def load():
+    global save_list
+    global saves
+    global bpms
+    with open('saves.json', 'r') as file:
+        save_list1 = json.load(file)
+    saves = save_list1[0]
+    bpms = save_list1[1]
+    save_list = save_list1

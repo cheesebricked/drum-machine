@@ -2,7 +2,7 @@ import pygame
 import sprites
 import settings
 import render
-from saves import saves
+import saves
 
 pygame.init()
 
@@ -23,6 +23,18 @@ ADVANCE = pygame.USEREVENT + 1
 BPM_TICK = pygame.time.set_timer(ADVANCE, sprites.TICK_BEAT)
 BPM_TICK
 
+def saver():
+    for s in render.save_box_list:
+        s.save()
+    saves.save()
+
+def loader():
+    for s in render.save_box_list:
+        s.load()
+    saves.load()
+
+saves.load()
+
 while run:
     scene.fill((0,0,0))
     for event in pygame.event.get():
@@ -31,11 +43,9 @@ while run:
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1: # left click
             for b in box_list:
                 b.check_click()
-            for s in render.save_box_list:
-                s.save()
+            saver()
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
-            for s in render.save_box_list:
-                s.load()
+            loader()
             BPM_TICK = pygame.time.set_timer(ADVANCE, sprites.TICK_BEAT)
         if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE: # pause and play
             play = not play

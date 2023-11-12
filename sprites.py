@@ -1,7 +1,7 @@
 import pygame
 import settings
 from render import box_list
-from saves import saves, bpms
+import saves
 
 pygame.mixer.init()
 pygame.font.init()
@@ -168,9 +168,10 @@ class Saves():
     
     def save(self):
         if self.save_rect.collidepoint(pygame.mouse.get_pos()):
+            saves.saves[self.num] = []
             for b in box_list:
-                saves[self.num].append(b.save_state())
-            bpms[self.num] = BPM
+                saves.saves[self.num].append(b.save_state())
+            saves.bpms[self.num] = BPM
             print("saved!")
     
     def load(self):
@@ -178,8 +179,8 @@ class Saves():
         global TICK_BEAT
         if self.save_rect.collidepoint(pygame.mouse.get_pos()):
             for s in range(len(box_list)):
-                box_list[(s - 1)].change_state(saves[self.num][(s-1)])
-            BPM = bpms[self.num]
+                box_list[(s - 1)].change_state(saves.saves[self.num][(s-1)])
+            BPM = saves.bpms[self.num]
             TICK_BEAT = (int(60000 / (BPM * (settings.SUBDIVISION / 4))))
             print("loaded!")
 
