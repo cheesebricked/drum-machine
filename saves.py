@@ -1,8 +1,9 @@
+from settings import BEAT_LENGTH, SOUND_LIST
 
-empty_save = [False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, 
-False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False]
-
-
+empty_save = []
+    
+for n in range((BEAT_LENGTH * len(SOUND_LIST))):
+    empty_save.append(False)
 
 saves = {
     "1" : empty_save,
