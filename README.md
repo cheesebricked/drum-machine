@@ -1,6 +1,7 @@
 # drum-machine
 A drum machine made with pygame. 
 I do not claim to own any audio assets used in this project.
+Started October 22, 2023
 
 INSTRUCTIONS:
 - Run main.py to start
